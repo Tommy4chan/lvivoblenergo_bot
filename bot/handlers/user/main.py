@@ -3,6 +3,8 @@ from aiogram.types import Message, CallbackQuery
 
 from bot.keyboards import KB_CONTINUE_REGISTRATION, KB_CHOOSE_GROUP
 
+from bot.database.methods.insert import register_user
+
 async def __start(msg: Message):
     """
     This handler will be called when user sends `/start` or `/restart` command
@@ -10,6 +12,7 @@ async def __start(msg: Message):
     """
     bot: Bot = msg.bot
     user_id = msg.from_user.id
+    register_user(user_id, f'@{msg.from_user.username}, {msg.from_user.full_name}')
     await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
 
 
