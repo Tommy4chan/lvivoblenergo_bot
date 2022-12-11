@@ -1,0 +1,1 @@
+from .inline import KB_CONTINUE_REGISTRATION, KB_CHOOSE_GROUP
