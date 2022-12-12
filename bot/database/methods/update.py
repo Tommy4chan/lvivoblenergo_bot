@@ -1,5 +1,6 @@
 from bot.database.main import Database
 
+
 def update_user(user_id, user_info):
     database = Database()
     database.open_connection()
@@ -9,6 +10,7 @@ def update_user(user_id, user_info):
     cursor.execute(sql, val)
     database.DB.commit()
     database.close_connection()
+
 
 def update_user_group(user_id, user_group):
     database = Database()

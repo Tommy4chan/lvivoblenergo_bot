@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Text
 
 from bot.keyboards import KB_CONTINUE_REGISTRATION, KB_CHOOSE_GROUP, KB_POWEROFF_SCHEDULE
 
-from bot.utils import decode_callback_data
+from bot.utils import decode_callback_data, get_poweroff_schedule_text
 
 from bot.database.methods.other import register_user
 from bot.database.methods.update import update_user_group
@@ -29,7 +29,7 @@ async def __new_poweroff_schedule(msg: Message):
     bot: Bot = msg.bot
     user_id = msg.from_user.id
 
-    await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
+    await bot.send_message(user_id, get_poweroff_schedule_text(user_id), parse_mode='Markdown')
 
 
 async def __change_group(query: CallbackQuery):

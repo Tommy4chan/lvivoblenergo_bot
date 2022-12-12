@@ -1,5 +1,6 @@
 from bot.database.main import Database
 
+
 def create_user(user_id, user_info):
     database = Database()
     database.open_connection()
