@@ -1,11 +1,10 @@
 from bot.database.main import Database
+from bot.database.methods.insert import create_user
+from bot.database.methods.update import update_user
+from bot.database.methods.select import is_user_registered
 
-def is_user_registered(user_id):
-    database = Database()
-    database.open_connection()
-    cursor = database.DB.cursor()
-    sql = f"SELECT * FROM users WHERE user_id ='{user_id}'"
-    cursor.execute(sql)
-    res = cursor.fetchall()
-    database.close_connection()
-    return False if len(res) == 0 else True
+def register_user(user_id, user_info):
+    if is_user_registered(user_id):
+        update_user(user_id, user_info)
+    else:
+        create_user(user_id, user_info)
