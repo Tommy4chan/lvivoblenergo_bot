@@ -1,1 +1,1 @@
-from .main import decode_callback_data, get_poweroff_schedule_text
+from .main import decode_callback_data, get_poweroff_schedule_text, get_weekday
