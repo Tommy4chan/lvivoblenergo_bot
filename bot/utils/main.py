@@ -35,4 +35,8 @@ def get_poweroff_schedule_text(user_id, selected_weekday):
 
 def get_weekday():
     dt = datetime.now(pytz.timezone('Europe/Kiev'))
-    return dt.weekday();
+    return dt.weekday()
+
+def get_state_in_emoji(state):
+    state_in_emoji = ["☑️", "✅"]
+    return state_in_emoji[state]

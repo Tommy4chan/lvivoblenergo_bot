@@ -7,7 +7,8 @@ from bot.keyboards import KB_CONTINUE_REGISTRATION, KB_CHOOSE_GROUP, KB_POWEROFF
 from bot.utils import decode_callback_data, get_poweroff_schedule_text, get_weekday
 
 from bot.database.methods.other import register_user
-from bot.database.methods.update import update_user_group
+from bot.database.methods.update import update_user_group, update_user_notification_state
+
 
 async def __start(msg: Message):
     """
@@ -58,6 +59,7 @@ async def __group_choosed(query: CallbackQuery):
     await __new_poweroff_schedule(query)
     await query.answer()
 
+
 async def __select_another_day(query: CallbackQuery):
     """
     This query handler will be called when user change day to another
@@ -67,6 +69,53 @@ async def __select_another_day(query: CallbackQuery):
 
     await query.message.edit_text(get_poweroff_schedule_text(user_id, selected_weekday), reply_markup=get_schedule_menu(user_id, selected_weekday), parse_mode='Markdown')
     await query.answer()
+
+
+async def __change_notification_state(query: CallbackQuery):
+    """
+    This query handler will be called when user change notification state
+    """
+    user_id = query.from_user.id
+    weekday = get_weekday()
+
+    update_user_notification_state(user_id, decode_callback_data(query))
+
+    await query.message.edit_text(get_poweroff_schedule_text(user_id, weekday), reply_markup=get_schedule_menu(user_id, weekday), parse_mode='Markdown')
+    await query.answer()
+
+
+async def __what_is_notification(query: CallbackQuery):
+    """
+    This query handler will be called when user click on "Що це?" button
+    """
+    bot: Bot = query.bot
+    user_id = query.from_user.id
+
+    await bot.send_message(user_id, f'Ви можете увімкнути сповіщення, щоб Бот кожен день відправляв Вам графік відключень в іншому випадку Вам самим доведеться змінювати день')
+    await query.answer()
+
+
+async def __developer(query: CallbackQuery):
+    """
+    This query handler will be called when user click on "Розробник" button
+    """
+    bot: Bot = query.bot
+    user_id = query.from_user.id
+
+    await bot.send_message(user_id, f'Розробник цього бота Панурін Антон, студент Національного університету "Львівська Політехніка" 😎\nУ разі виникнення запитань, пропозицій, або проблем писати @Tommy4chan')
+    await query.answer()
+
+
+async def __donate(query: CallbackQuery):
+    """
+    This query handler will be called when user click on "Донат" button
+    """
+    bot: Bot = query.bot
+    user_id = query.from_user.id
+
+    await bot.send_message(user_id, f'Для підтримки розробника та оплати хостингу Ви можете зробити донат: https://send.monobank.ua/jar/42BHbjmmq6')
+    await query.answer()
+
 
 def register_users_handlers(dp: Dispatcher):
 
@@ -80,4 +129,8 @@ def register_users_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(__change_group, text="change_group")
     dp.register_callback_query_handler(__group_choosed, Text(startswith='group_'))
     dp.register_callback_query_handler(__select_another_day, Text(startswith='weekday_'))
+    dp.register_callback_query_handler(__change_notification_state, Text(startswith='notification_'))
+    dp.register_callback_query_handler(__what_is_notification, Text(startswith='what_is_notification'))
+    dp.register_callback_query_handler(__developer, Text(startswith='developer'))
+    dp.register_callback_query_handler(__donate, Text(startswith='donate'))
 
