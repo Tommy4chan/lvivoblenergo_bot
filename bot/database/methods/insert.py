@@ -1,13 +1,14 @@
 from bot.database.main import Database
 
 
-def create_user(user_id, user_info):
+async def create_user(user_id, user_info):
     database = Database()
-    cursor = database.DB.cursor()
+    await database.open_connection()
+    cursor = await database.DB.cursor()
     sql = "INSERT INTO users (user_id, user_info) VALUES (%s, %s)"
     val = (str(user_id), str(user_info))
-    cursor.execute(sql, val)
-    database.DB.commit()
+    await cursor.execute(sql, val)
+    await database.DB.commit()
     database.close_connection()
 
 

@@ -8,7 +8,7 @@ def decode_callback_data(callback):
     return int(callback.data.split('_')[1])
 
 
-def get_poweroff_schedule_text(user_id, selected_weekday):
+async def get_poweroff_schedule_text(user_id, selected_weekday):
     poweroff_schedule = [[[0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2]],
                         [[1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0]],
                         [[2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1], [0, 1, 2, 0, 1, 2], [1, 2, 0, 1, 2, 0], [2, 0, 1, 2, 0, 1]]]
@@ -16,7 +16,7 @@ def get_poweroff_schedule_text(user_id, selected_weekday):
     name_of_weekday = ['Понеділок', 'Вівторок', 'Середа', 'Четвер', "П'ятниця", 'Субота', 'Неділя']
 
     weekday_name = name_of_weekday[selected_weekday]
-    user_group = get_user_group(user_id) - 1
+    user_group = await get_user_group(user_id) - 1
     poweroff_schedule_text = ''
     for i in range(6):
         poweroff_schedule_text += '\n'
@@ -28,7 +28,7 @@ def get_poweroff_schedule_text(user_id, selected_weekday):
         else:
             poweroff_schedule_text += ' - Електроенергія ⚠️'
     poweroff_schedule_text = f'Ваша група - {user_group + 1}\nВибрано: {weekday_name}\n' + poweroff_schedule_text
-    if not is_user_notfication_enabled(user_id):
+    if not await is_user_notfication_enabled(user_id):
         return poweroff_schedule_text
     return f'Сьогодні: {name_of_weekday[get_weekday()]}, {poweroff_schedule_text}'
 

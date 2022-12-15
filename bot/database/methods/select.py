@@ -1,30 +1,33 @@
 from bot.database.main import Database
 
-def is_user_registered(user_id):
+async def is_user_registered(user_id):
     database = Database()
-    cursor = database.DB.cursor()
+    await database.open_connection()
+    cursor = await database.DB.cursor()
     sql = f"SELECT * FROM users WHERE user_id = '{user_id}'"
-    cursor.execute(sql)
-    result = cursor.fetchall()
+    await cursor.execute(sql)
+    result = await cursor.fetchall()
     database.close_connection()
     return len(result)
 
 
-def is_user_notfication_enabled(user_id):
+async def is_user_notfication_enabled(user_id):
     database = Database()
-    cursor = database.DB.cursor()
+    await database.open_connection()
+    cursor = await database.DB.cursor()
     sql = f"SELECT * FROM users WHERE user_id = '{user_id}' AND notification = '1'"
-    cursor.execute(sql)
-    result = cursor.fetchall()
+    await cursor.execute(sql)
+    result = await cursor.fetchall()
     database.close_connection()
     return len(result)
 
 
-def get_user_group(user_id):
+async def get_user_group(user_id):
     database = Database()
-    cursor = database.DB.cursor()
+    await database.open_connection()
+    cursor = await database.DB.cursor()
     sql = f"SELECT user_group FROM users WHERE user_id = '{user_id}'"
-    cursor.execute(sql)
-    result = cursor.fetchone()[0]
+    await cursor.execute(sql)
+    result = await cursor.fetchone()
     database.close_connection()
-    return int(result)
+    return int(result[0])

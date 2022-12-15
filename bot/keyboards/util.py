@@ -4,10 +4,10 @@ from bot.utils import get_weekday, get_state_in_emoji
 from bot.database.methods.select import is_user_notfication_enabled
 
 
-def get_schedule_menu(user_id, selected_weekday):
+async def get_schedule_menu(user_id, selected_weekday):
     name_of_weekday_short = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд']
     
-    user_notification_state = is_user_notfication_enabled(user_id)
+    user_notification_state = await is_user_notfication_enabled(user_id)
     current_weekday = get_weekday()
 
     if current_weekday == selected_weekday:
