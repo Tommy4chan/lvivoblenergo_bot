@@ -20,6 +20,7 @@ async def __start(msg: Message):
     await register_user(user_id, f'@{msg.from_user.username}, {msg.from_user.full_name}')
     await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
 
+
 @rate_limit(limit=5, key='new_poweroff_schedule')
 async def __new_poweroff_schedule(msg: Message):
     """
@@ -51,7 +52,7 @@ async def __group_choosed(query: CallbackQuery):
     """
     bot: Bot = query.bot
     user_id = query.from_user.id
-    group_number = decode_callback_data(query)
+    group_number = await decode_callback_data(query)
 
     await update_user_group(user_id, group_number)
 
@@ -65,7 +66,7 @@ async def __select_another_day(query: CallbackQuery):
     This query handler will be called when user change day to another
     """
     user_id = query.from_user.id
-    selected_weekday = decode_callback_data(query)
+    selected_weekday = await decode_callback_data(query)
 
     await query.message.edit_text(await get_poweroff_schedule_text(user_id, selected_weekday), reply_markup=await get_schedule_menu(user_id, selected_weekday), parse_mode='Markdown')
     await query.answer()
@@ -78,7 +79,7 @@ async def __change_notification_state(query: CallbackQuery):
     user_id = query.from_user.id
     weekday = get_weekday()
 
-    await update_user_notification_state(user_id, decode_callback_data(query))
+    await update_user_notification_state(user_id, await decode_callback_data(query))
 
     await query.message.edit_text(await get_poweroff_schedule_text(user_id, weekday), reply_markup=await get_schedule_menu(user_id, weekday), parse_mode='Markdown')
     await query.answer()
@@ -133,4 +134,3 @@ def register_users_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(__what_is_notification, Text(startswith='what_is_notification'))
     dp.register_callback_query_handler(__developer, Text(startswith='developer'))
     dp.register_callback_query_handler(__donate, Text(startswith='donate'))
-

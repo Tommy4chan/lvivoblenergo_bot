@@ -1,16 +1,14 @@
 import os
-from contextlib import suppress
 
-from aiogram import Bot, Dispatcher, executor, types
-from aiogram.utils.exceptions import ChatNotFound, BotBlocked
+from aiogram import Bot, Dispatcher, executor
 import bot.middleware as middleware
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from bot.handlers import register_all_handlers
 
-from dotenv import load_dotenv # For local user only
+from dotenv import load_dotenv # For local use only
 
-load_dotenv() # For local user only
+load_dotenv() # For local use only
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 

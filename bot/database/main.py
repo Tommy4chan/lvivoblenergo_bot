@@ -1,6 +1,10 @@
 from typing import Final
+import os
 
 import aiomysql
+from dotenv import load_dotenv # For local use only
+
+load_dotenv() # For local use only
 
 
 class Database():
@@ -8,11 +12,11 @@ class Database():
 
     async def open_connection(self):
         self.DB = await aiomysql.connect(
-            host="127.0.0.1",
-            port=3306,
-            user="root",
-            password="",
-            db="lvivoblenergo_bot_db"
+            host=os.getenv('HOST'),
+            port=int(os.getenv('PORT')),
+            user=os.getenv('USER'),
+            password=os.getenv('PASSWORD'),
+            db=os.getenv('DB')
         )
 
     def close_connection(self):

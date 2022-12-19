@@ -1,10 +1,16 @@
 from datetime import datetime
 import pytz
 
-from bot.database.methods.select import is_user_notfication_enabled, get_user_group
+from aiogram import Dispatcher, Bot
+from aiogram.utils.exceptions import ChatNotFound, BotBlocked
+from contextlib import suppress
+import logging
+
+from bot.database.methods.select import is_user_notfication_enabled, get_user_group, get_all_users_with_enabled_notification
+from bot.keyboards import get_schedule_menu
 
 
-def decode_callback_data(callback):
+async def decode_callback_data(callback):
     return int(callback.data.split('_')[1])
 
 
