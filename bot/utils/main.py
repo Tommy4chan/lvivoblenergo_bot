@@ -1,13 +1,9 @@
 from datetime import datetime
 import pytz
 
-from aiogram import Dispatcher, Bot
 from aiogram.utils.exceptions import ChatNotFound, BotBlocked
-from contextlib import suppress
-import logging
 
-from bot.database.methods.select import is_user_notfication_enabled, get_user_group, get_all_users_with_enabled_notification
-from bot.keyboards import get_schedule_menu
+from bot.database.methods.select import is_user_notfication_enabled, get_user_group
 
 
 async def decode_callback_data(callback):
@@ -42,6 +38,7 @@ async def get_poweroff_schedule_text(user_id, selected_weekday):
 def get_weekday():
     dt = datetime.now(pytz.timezone('Europe/Kiev'))
     return dt.weekday()
+
 
 def get_state_in_emoji(state):
     state_in_emoji = ["☑️", "✅"]
