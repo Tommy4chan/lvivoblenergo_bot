@@ -4,12 +4,13 @@ from aiogram.dispatcher.filters import Text
 
 from bot.keyboards import KB_CONTINUE_REGISTRATION, KB_CHOOSE_GROUP, KB_POWEROFF_SCHEDULE, get_schedule_menu
 
-from bot.utils import decode_callback_data, get_poweroff_schedule_text, get_weekday, rate_limit
+from bot.utils import decode_callback_data, get_poweroff_schedule_text, get_weekday, rate_limit, telegram_chat_logging
 
 from bot.database.methods.other import register_user
 from bot.database.methods.update import update_user_group, update_user_notification_state
 
 
+@telegram_chat_logging
 async def __start(msg: Message):
     """
     This handler will be called when user sends `/start` or `/restart`
@@ -21,6 +22,7 @@ async def __start(msg: Message):
     await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
 
 
+@telegram_chat_logging
 @rate_limit(limit=5, key='new_poweroff_schedule')
 async def __new_poweroff_schedule(msg: Message):
     """
@@ -35,6 +37,7 @@ async def __new_poweroff_schedule(msg: Message):
     await bot.send_message(user_id, await get_poweroff_schedule_text(user_id, weekday), reply_markup=await get_schedule_menu(user_id, weekday), parse_mode='Markdown')
 
 
+@telegram_chat_logging
 async def __change_group(query: CallbackQuery):
     """
     This query handler will be called when user change group
@@ -46,6 +49,7 @@ async def __change_group(query: CallbackQuery):
     await query.answer()
 
 
+@telegram_chat_logging
 async def __group_choosed(query: CallbackQuery):
     """
     This query handler will be called when group is choosed choosed
@@ -61,6 +65,7 @@ async def __group_choosed(query: CallbackQuery):
     await query.answer()
 
 
+@telegram_chat_logging
 async def __select_another_day(query: CallbackQuery):
     """
     This query handler will be called when user change day to another
@@ -72,19 +77,21 @@ async def __select_another_day(query: CallbackQuery):
     await query.answer()
 
 
+@telegram_chat_logging
 async def __change_notification_state(query: CallbackQuery):
     """
     This query handler will be called when user change notification state
     """
     user_id = query.from_user.id
     weekday = get_weekday()
-
+    
     await update_user_notification_state(user_id, await decode_callback_data(query))
 
     await query.message.edit_text(await get_poweroff_schedule_text(user_id, weekday), reply_markup=await get_schedule_menu(user_id, weekday), parse_mode='Markdown')
     await query.answer()
 
 
+@telegram_chat_logging
 async def __what_is_notification(query: CallbackQuery):
     """
     This query handler will be called when user click on "Що це?" button
@@ -96,6 +103,7 @@ async def __what_is_notification(query: CallbackQuery):
     await query.answer()
 
 
+@telegram_chat_logging
 async def __developer(query: CallbackQuery):
     """
     This query handler will be called when user click on "Розробник" button
@@ -107,6 +115,7 @@ async def __developer(query: CallbackQuery):
     await query.answer()
 
 
+@telegram_chat_logging
 async def __donate(query: CallbackQuery):
     """
     This query handler will be called when user click on "Донат" button

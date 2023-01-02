@@ -1,13 +1,41 @@
 from datetime import datetime
 import pytz
+import os
 
-from aiogram.utils.exceptions import ChatNotFound, BotBlocked
+from aiogram import Bot
+from bot.database.methods.select import is_user_notfication_enabled, get_user_group, is_user_admin
 
-from bot.database.methods.select import is_user_notfication_enabled, get_user_group
+from dotenv import load_dotenv # For local use only
+
+load_dotenv() # For local use only
+
+ADMIN_CHAT_ID = os.getenv('ADMIN_CHAT_ID')
 
 
 async def decode_callback_data(callback):
     return int(callback.data.split('_')[1])
+
+
+def is_admin(func):
+    async def inner_function(*args):
+        user_id = args[0].from_user.id
+        if await is_user_admin(user_id):
+            await func(*args)
+    return inner_function
+
+
+def telegram_chat_logging(func):
+    async def inner_function(*args):
+        log_message = ""
+        try:
+            log_message = "Function name: " + str(func.__name__)
+            await func(*args)
+        except Exception as e:
+            log_message += "\nError: " + str(e)
+            pass
+        callback_query = args[0]
+        await callback_query.bot.send_message(ADMIN_CHAT_ID, f"User: {callback_query.from_user.full_name}\nUsername: @{callback_query.from_user.username}\n{log_message}")
+    return inner_function
 
 
 async def get_poweroff_schedule_text(user_id, selected_weekday):

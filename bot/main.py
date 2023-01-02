@@ -31,7 +31,6 @@ async def scheduler(dp: Dispatcher):
 
 
 def start_bot():
-    
     # Initializing bot and dispatcher
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher(bot, storage=MemoryStorage())
