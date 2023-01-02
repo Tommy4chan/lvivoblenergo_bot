@@ -3,6 +3,7 @@ import asyncio
 import aioschedule
 
 from aiogram import Bot, Dispatcher, executor
+from aiogram.utils.executor import start_webhook
 import bot.middleware as middleware
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
@@ -34,5 +35,18 @@ def start_bot():
     # Initializing bot and dispatcher
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher(bot, storage=MemoryStorage())
-    executor.start_polling(dp, skip_updates=True, on_startup=__on_start_up)
     
+    WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
+    WEBAPP_HOST = '0.0.0.0'
+    WEBAPP_PORT = os.getenv('PORT', default=8000)
+
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        on_startup=__on_start_up,
+        skip_updates=True,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )
+    
+    #executor.start_polling(dp, skip_updates=True, on_startup=__on_start_up)
