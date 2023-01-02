@@ -13,7 +13,7 @@ class Database():
     async def open_connection(self):
         self.DB = await aiomysql.connect(
             host=os.getenv('HOST'),
-            port=int(os.getenv('PORT')),
+            port=int(os.getenv('DB_PORT')),
             user=os.getenv('USER'),
             password=os.getenv('PASSWORD'),
             db=os.getenv('DB')
