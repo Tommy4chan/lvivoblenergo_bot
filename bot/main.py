@@ -16,17 +16,17 @@ from dotenv import load_dotenv # For local use only
 load_dotenv() # For local use only
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-APP_NAME = os.getenv('APP_NAME')
-
-WEBHOOK_HOST = f'https://{APP_NAME}.ondigitalocean.app'
-WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
-WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
-
-WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = os.getenv('PORT', default=8000)
+#APP_NAME = os.getenv('APP_NAME')
+#
+#WEBHOOK_HOST = f'https://{APP_NAME}.ondigitalocean.app'
+#WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
+#WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+#
+#WEBAPP_HOST = '0.0.0.0'
+#WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 async def __on_start_up(dp: Dispatcher):
-    await dp.bot.set_webhook(WEBHOOK_URL)
+    #await dp.bot.set_webhook(WEBHOOK_URL)
     register_all_handlers(dp)
     middleware.setup(dp)
     asyncio.create_task(scheduler(dp))
@@ -44,15 +44,13 @@ def start_bot():
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher(bot, storage=MemoryStorage())
     
-
-
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        on_startup=__on_start_up,
-        skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-    )
+    #start_webhook(
+    #    dispatcher=dp,
+    #    webhook_path=WEBHOOK_PATH,
+    #    on_startup=__on_start_up,
+    #    skip_updates=True,
+    #    host=WEBAPP_HOST,
+    #    port=WEBAPP_PORT,
+    #)
     
-    #executor.start_polling(dp, skip_updates=True, on_startup=__on_start_up)
+    executor.start_polling(dp, skip_updates=True, on_startup=__on_start_up)
