@@ -1,6 +1,7 @@
 from datetime import datetime
 import pytz
 import os
+import logging
 
 from aiogram import Bot
 from bot.database.methods.select import is_user_notfication_enabled, get_user_group, is_user_admin
@@ -34,7 +35,11 @@ def telegram_chat_logging(func):
             log_message += "\nError: " + str(e)
             pass
         callback_query = args[0]
-        await callback_query.bot.send_message(ADMIN_CHAT_ID, f"User: {callback_query.from_user.full_name}\nUsername: @{callback_query.from_user.username}\n{log_message}")
+        try:
+            await callback_query.bot.send_message(ADMIN_CHAT_ID, f"User: {callback_query.from_user.full_name}\nUsername: @{callback_query.from_user.username}\n{log_message}")
+        except Exception as e:
+            logging.warning(e)
+            pass
     return inner_function
 
 

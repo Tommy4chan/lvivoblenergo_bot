@@ -22,8 +22,8 @@ async def __start(msg: Message):
     await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
 
 
+@rate_limit(limit=5, key='new_poweroff_schedule')
 @telegram_chat_logging
-@rate_limit(limit=10, key='new_poweroff_schedule')
 async def __new_poweroff_schedule(msg: Message):
     """
     This handler will be called when user sends message
