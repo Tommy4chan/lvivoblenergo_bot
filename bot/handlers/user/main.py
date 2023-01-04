@@ -132,6 +132,7 @@ def register_users_handlers(dp: Dispatcher):
     # Message handlers
     
     dp.register_message_handler(__start, commands=["start", "restart"])
+    dp.register_message_handler(__new_poweroff_schedule, commands=["schedule"])
     dp.register_message_handler(__new_poweroff_schedule, content_types=['text'], text="Графік відключень🕔")
 
     # Callback handlers
