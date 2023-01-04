@@ -27,7 +27,6 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 async def __on_start_up(dp: Dispatcher):
     #await dp.bot.set_webhook(WEBHOOK_URL)
-    await send_new_schedule(dp.bot)
     register_all_handlers(dp)
     middleware.setup(dp)
     asyncio.create_task(scheduler(dp))

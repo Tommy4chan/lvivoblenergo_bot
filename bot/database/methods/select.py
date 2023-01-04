@@ -1,4 +1,4 @@
-from bot.database.main import select, open_connection
+from bot.database.main import select
 
 async def is_user_registered(user_id):
     return len(await select(f"SELECT * FROM users WHERE user_id = '{user_id}'"))
