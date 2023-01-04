@@ -22,8 +22,8 @@ async def __start(msg: Message):
     await bot.send_message(user_id, "Привіт!\nЯ неофіційний бот, що буде показувати графік відключення електроенергії спираючись на публічні дані опубліковані Львівобленерго", reply_markup=KB_CONTINUE_REGISTRATION)
 
 
+@rate_limit(limit=5, key='new_poweroff_schedule')
 @telegram_chat_logging
-@rate_limit(limit=10, key='new_poweroff_schedule')
 async def __new_poweroff_schedule(msg: Message):
     """
     This handler will be called when user sends message
@@ -132,6 +132,7 @@ def register_users_handlers(dp: Dispatcher):
     # Message handlers
     
     dp.register_message_handler(__start, commands=["start", "restart"])
+    dp.register_message_handler(__new_poweroff_schedule, commands=["schedule"])
     dp.register_message_handler(__new_poweroff_schedule, content_types=['text'], text="Графік відключень🕔")
 
     # Callback handlers
